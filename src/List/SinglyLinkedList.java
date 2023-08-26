@@ -17,7 +17,7 @@ public class SinglyLinkedList implements List {
     }
 
     @Override
-    public boolean remove(Object value) {
+    public boolean remove(Integer value) {
         return false;
     }
 
