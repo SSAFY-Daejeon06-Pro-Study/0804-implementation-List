@@ -1,8 +1,8 @@
 package List;
 
 public class SinglyLinkedList implements List {
-    private Node head;
-    private Node tail;
+    private SinglyNode head;
+    private SinglyNode tail;
     private int size;
 
     public SinglyLinkedList() {
@@ -13,7 +13,7 @@ public class SinglyLinkedList implements List {
 
     @Override
     public boolean add(int value) {
-        Node node = new Node(value, null);
+        SinglyNode node = new SinglyNode(value, null);
         if (size == 0) {
             head = node;
         } else {
@@ -29,22 +29,22 @@ public class SinglyLinkedList implements List {
         if (index == size) {
             add(value);
         } else if (index == 0) {
-            head = new Node(value, head);
+            head = new SinglyNode(value, head);
             size++;
         } else {
-            Node prev = search(index - 1);
-            prev.next = new Node(value, prev.next);
+            SinglyNode prev = search(index - 1);
+            prev.next = new SinglyNode(value, prev.next);
             size++;
         }
     }
 
     @Override
     public int remove(int index) {
-        Node deleteNode = search(index);
+        SinglyNode deleteNode = search(index);
         if (index == 0) {
             head = head.next;
         } else {
-            Node prev = search(index - 1);
+            SinglyNode prev = search(index - 1);
             prev.next = deleteNode.next;
             if (deleteNode == tail) {
                 tail = prev;
@@ -59,8 +59,8 @@ public class SinglyLinkedList implements List {
         if (value == null) {
             return false;
         }
-        Node prev = null;
-        for (Node now = head; now != null; now = now.next) {
+        SinglyNode prev = null;
+        for (SinglyNode now = head; now != null; now = now.next) {
             if (value.equals(now.data)) {
                 if (prev == null) {
                     head = now.next;
@@ -95,7 +95,7 @@ public class SinglyLinkedList implements List {
 
     @Override
     public int indexOf(int value) {
-        Node node = head;
+        SinglyNode node = head;
         for (int i = 0; i < size; i++) {
             if (node.data == value) {
                 return i;
@@ -122,24 +122,14 @@ public class SinglyLinkedList implements List {
         size = 0;
     }
 
-    private Node search(int index) {
+    private SinglyNode search(int index) {
         if (index < 0 || size <= index) {
             throw new IndexOutOfBoundsException();
         }
-        Node node = head;
+        SinglyNode node = head;
         for (int i = 0; i < index; i++) {
             node = node.next;
         }
         return node;
-    }
-}
-
-class Node {
-    int data;
-    Node next;
-
-    public Node(int data, Node next) {
-        this.data = data;
-        this.next = next;
     }
 }
