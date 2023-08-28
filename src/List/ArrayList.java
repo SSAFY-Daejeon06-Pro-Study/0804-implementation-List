@@ -69,7 +69,7 @@ public class ArrayList implements List {
     }
 
     @Override
-    public boolean remove(Object value) {
+    public boolean remove(Integer value) {
         for (int index = 0; index < size; index++) {
             if (value.equals(elementData[index])) {
                 remove(index);
@@ -123,5 +123,15 @@ public class ArrayList implements List {
     public void clear() {
         elementData = new int[DEFAULT_CAPACITY];
         size = 0;
+    }
+
+    public void print(){
+        System.out.println("--------");
+        for (int i = 0; i < size; i++) {
+            System.out.print(elementData[i] + " ");
+        }
+        System.out.print("\n원소 개수 : " + size + " 배열 사이즈 : " + elementData.length);
+        System.out.println("\n--------");
+        System.out.println();
     }
 }
