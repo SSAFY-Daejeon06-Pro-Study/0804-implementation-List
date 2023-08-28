@@ -49,7 +49,7 @@ public interface List {
      * @return 리스트에 삭제할 요소가 없거나 삭제에 실패할
      *         경우 {@code false}를 반환하고 삭제에 성공할 경우 {@code true}를 반환
      */
-    boolean remove(Object value);
+    boolean remove(Integer value);
 
     /**
      * 리스트에 있는 특정 위치의 요소를 반환합니다.
@@ -100,6 +100,7 @@ public interface List {
     /**
      * 리스트에 있는 요소를 모두 삭제합니다.
      */
-    public void clear();
+    void clear();
 
+    default void print() { };
 }
