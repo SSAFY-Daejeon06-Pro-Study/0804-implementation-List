@@ -1,4 +1,4 @@
-package List;
+package day0830;
 
 /**
  *
@@ -101,5 +101,7 @@ public interface List {
      * 리스트에 있는 요소를 모두 삭제합니다.
      */
     public void clear();
+
+    void print();
 
 }
