@@ -52,7 +52,8 @@ public class DoublyLinkedList implements List {
     		Node newTail = new Node(value, tail, null);
     		tail.next = newTail;
     		tail = newTail;
-    	} else {
+    	} 
+    	else if(index <= size>>1){
     		Node temp = head;
     		for(int i=0; i<index-1; i++) {
     			temp = temp.next;
@@ -62,6 +63,14 @@ public class DoublyLinkedList implements List {
     		temp.next = newNode;
     		newNode.next.prev = newNode;
     		
+    	} else {
+    		Node temp = tail;
+    		for(int i=0; i<size-index; i++) {
+    			temp = temp.prev;
+    		}
+    		Node newNode = new Node(value, temp, temp.next);
+    		temp.next = newNode;
+    		newNode.next.prev = newNode;
     	}
     	
     	size++;
@@ -87,7 +96,8 @@ public class DoublyLinkedList implements List {
     		newTail.next = null;
     		tail = newTail;
     		
-    	} else {
+    	} 
+    	else if(index <= size >> 1) {
     		Node temp = head;
     		for(int i=0; i<index; i++) {
     			temp = temp.next;
@@ -97,6 +107,15 @@ public class DoublyLinkedList implements List {
     		temp.next.prev = temp.prev;
     		temp.prev.next = temp.next;
     		
+    	} else {
+    		Node temp = tail;
+    		for(int i=0; i<size-index; i++) {
+    			temp = temp.prev;
+    		}
+    		returnVal = temp.num;
+    		
+    		temp.next.prev = temp.prev;
+    		temp.prev.next = temp.next;
     	}
     	size--;
         return returnVal;
@@ -118,9 +137,17 @@ public class DoublyLinkedList implements List {
 
     @Override
     public int get(int index) {
-    	Node temp = head;
-    	for(int i=0; i<index; i++) {
-    		temp = temp.next;
+    	Node temp = null;
+    	if(index > size >> 1) {
+    		temp = tail;
+    		for(int i=0; i<size-index; i++) {
+        		temp = temp.prev;
+        	}
+    	}else {
+    		temp = head;
+    		for(int i=0; i<index; i++) {
+    			temp = temp.next;
+    		}
     	}
     	
         return temp.num;
@@ -128,20 +155,30 @@ public class DoublyLinkedList implements List {
 
     @Override
     public void set(int index, int value) {
-    	Node temp = head;
-    	for(int i=0; i<index; i++) {
-    		temp = temp.next;
+    	
+    	Node temp = null;
+    	
+    	if(index > size >> 1) {
+    		 temp = tail;
+    		for(int i=0; i<size-index; i++) {
+        		temp = temp.prev;
+        	}
+    	} else {
+    		temp = head;
+    		for(int i=0; i<index; i++) {
+    			temp = temp.next;
+    		}
     	}
+    	
     	
         temp.num = value;
     }
 
     @Override
     public boolean contains(int value) {
+    	// 함수 재사용
+    	if(indexOf(value) != -1) return true;
     	
-    	for(Node temp = head; temp!=null; temp = temp.next) {
-    		if(temp.num == value) return true;
-    	}
         return false;
     }
 
