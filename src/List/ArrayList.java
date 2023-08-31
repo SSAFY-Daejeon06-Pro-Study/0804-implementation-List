@@ -1,4 +1,4 @@
-package day0830;
+package List;
 
 public class ArrayList implements List {
 	

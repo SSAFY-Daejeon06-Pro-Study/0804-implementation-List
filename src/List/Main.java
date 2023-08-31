@@ -1,8 +1,8 @@
-package day0830;
+package List;
 
 public class Main {
     public static void main(String[] args) {
-        List list = new ArrayList();
+        List list = new DoublyLinkedList();
 
         System.out.println("[add] 1, 2, 3 원소 추가");
         list.add(1);
@@ -63,6 +63,10 @@ public class Main {
         System.out.println(list.contains(8));
         System.out.println("--------");
         System.out.println();
+
+        System.out.println("[remove] 첫번째 원소 5 삭제");
+        list.remove(0);
+        list.print();
 
         System.out.println("[isEmpty] 비어있나?");
         System.out.println("--------");

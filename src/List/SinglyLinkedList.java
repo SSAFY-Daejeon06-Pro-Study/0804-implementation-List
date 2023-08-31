@@ -1,4 +1,4 @@
-package day0830;
+package List;
 
 public class SinglyLinkedList implements List {
 
@@ -71,9 +71,29 @@ public class SinglyLinkedList implements List {
         size++;
     }
 
+    // removeFirst는 remove(int index)에서 호출되는데,
+    // 그 곳에서 인덱스 예외처리를 해서 노드가 하나는 무조건 있음
+    private int removeFirst(){
+
+        int data = head.data;
+        if(size == 1){ // 노드가 하나 있을 때
+            clear();
+        }else{ // 노드가 두 개 이상 있을 때
+            Node next = head.next;
+            head.next = null;
+            head = next; // 헤드의 위치 변경
+            size--;
+        }
+        return data;
+    }
+
     @Override
     public int remove(int index) {
         checkBound(index);
+
+        if(index == 0){
+            return removeFirst();
+        }
 
         Node pre = searchByIndex(index-1);
         Node removeNode = pre.next;
