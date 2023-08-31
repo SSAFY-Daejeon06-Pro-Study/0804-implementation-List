@@ -41,6 +41,7 @@ public class DoublyLinkedList implements List {
     @Override
     public void add(int index, int value) {
     	
+    	boundaryCheck(index);
     	// head 교체
     	if(index == 0 ) {
     		Node newHead = new Node(value, null, head);
@@ -53,21 +54,8 @@ public class DoublyLinkedList implements List {
     		tail.next = newTail;
     		tail = newTail;
     	} 
-    	else if(index <= size>>1){
-    		Node temp = head;
-    		for(int i=0; i<index-1; i++) {
-    			temp = temp.next;
-    		}
-    		
-    		Node newNode = new Node(value, temp, temp.next);
-    		temp.next = newNode;
-    		newNode.next.prev = newNode;
-    		
-    	} else {
-    		Node temp = tail;
-    		for(int i=0; i<size-index; i++) {
-    			temp = temp.prev;
-    		}
+    	else {
+    		Node temp = search(index);
     		Node newNode = new Node(value, temp, temp.next);
     		temp.next = newNode;
     		newNode.next.prev = newNode;
@@ -81,9 +69,14 @@ public class DoublyLinkedList implements List {
     public int remove(int index) {
     	
     	int returnVal = 0;
+    	boundaryCheck(index);
+    	
+    	if(size==1) {
+    		clear();
+    	}
     	
     	// head 교체
-    	if(index == 0 ) {
+    	else if(index == 0 ) {
     		returnVal = head.num;
     		Node newHead = head.next;
     		newHead.prev = null;
@@ -97,25 +90,14 @@ public class DoublyLinkedList implements List {
     		tail = newTail;
     		
     	} 
-    	else if(index <= size >> 1) {
-    		Node temp = head;
-    		for(int i=0; i<index; i++) {
-    			temp = temp.next;
-    		}
-    		returnVal = temp.num;
+    	else {
+    		// 삭제하기 직전 Node
+    		Node temp = search(index);
+    		returnVal = temp.next.num;
     		
-    		temp.next.prev = temp.prev;
-    		temp.prev.next = temp.next;
+    		temp.next.next.prev = temp;
+    		temp.next= temp.next.next;
     		
-    	} else {
-    		Node temp = tail;
-    		for(int i=0; i<size-index; i++) {
-    			temp = temp.prev;
-    		}
-    		returnVal = temp.num;
-    		
-    		temp.next.prev = temp.prev;
-    		temp.prev.next = temp.next;
     	}
     	size--;
         return returnVal;
@@ -137,40 +119,15 @@ public class DoublyLinkedList implements List {
 
     @Override
     public int get(int index) {
-    	Node temp = null;
-    	if(index > size >> 1) {
-    		temp = tail;
-    		for(int i=0; i<size-index; i++) {
-        		temp = temp.prev;
-        	}
-    	}else {
-    		temp = head;
-    		for(int i=0; i<index; i++) {
-    			temp = temp.next;
-    		}
-    	}
-    	
+    	boundaryCheck(index);
+    	Node temp = search(index+1);
         return temp.num;
     }
 
     @Override
     public void set(int index, int value) {
-    	
-    	Node temp = null;
-    	
-    	if(index > size >> 1) {
-    		 temp = tail;
-    		for(int i=0; i<size-index; i++) {
-        		temp = temp.prev;
-        	}
-    	} else {
-    		temp = head;
-    		for(int i=0; i<index; i++) {
-    			temp = temp.next;
-    		}
-    	}
-    	
-    	
+    	boundaryCheck(index);
+    	Node temp = search(index+1);
         temp.num = value;
     }
 
@@ -211,6 +168,24 @@ public class DoublyLinkedList implements List {
 
     }
     
+    private Node search(int index) {
+    	Node temp = null;
+    	if(index < size >> 1) {
+    		temp = head;
+    		for(int i=0; i<index-1; i++) {
+    			temp = temp.next;
+    		}
+    	} else {
+    		temp = tail;
+    		for(int i=0; i<size - index; i++) {
+    			temp = temp.prev;
+    		}
+    	}
+    	
+    	return temp;
+
+	}
+    
     public void print(){
         System.out.println("--------");
         Node node = head;
@@ -222,4 +197,11 @@ public class DoublyLinkedList implements List {
         System.out.println("--------");
         System.out.println();
     }
+    
+    private void boundaryCheck(int index) {
+    	if(index < 0 || index >= size) {
+    		throw new IndexOutOfBoundsException();
+    	}
+
+	}
 }
