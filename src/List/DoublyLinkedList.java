@@ -198,14 +198,14 @@ public class DoublyLinkedList implements List {
 
     @Override
     public void clear() {
-        for (Node x = head.next; x != tail; ) {
+        for (Node x = head; x != null;) {
             Node next = x.next;
             x.next = null;
             x.prev = null;
             x = next;
         }
-        head.next = tail;
-        tail.prev = head;
+        head = null;
+        tail = null;
         size = 0;
     }
 
