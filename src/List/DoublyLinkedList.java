@@ -20,6 +20,7 @@ public class DoublyLinkedList implements List {
         if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
     }
 
+    //맨 앞단에 노드 삽입
     private void linkFirst(int value) {
         Node h = head;
         Node newNode = new Node(null, value, h);
@@ -31,6 +32,7 @@ public class DoublyLinkedList implements List {
         size++;
     }
 
+    //맨 뒷단에 노드 삽입
     private void linkLast(int value) {
         Node t = tail;
         Node newNode = new Node(t, value, null);
@@ -42,11 +44,10 @@ public class DoublyLinkedList implements List {
         size++;
     }
 
+    //맨 앞단의 노드 삭제
     private int unlinkFirst() {
-        Node h = head;
-        int value = h.value;
-        Node next = h.next;
-        h = null;
+        int value = head.value;
+        Node next = head.next;
         head = next;
 
         if(next == null)
@@ -57,11 +58,10 @@ public class DoublyLinkedList implements List {
         return value;
     }
 
+    //맨 뒷단의 노드 삭제
     private int unlinkLast() {
-        Node t = tail;
-        int value = t.value;
-        Node prev = t.prev;
-        t = null;
+        int value = tail.value;
+        Node prev = tail.prev;
         tail = prev;
 
         if(prev == null)
@@ -87,6 +87,7 @@ public class DoublyLinkedList implements List {
         }
     }
 
+    //노드 삭제
     private int unlink(Node x) {
         if(x == head) {
             return unlinkFirst();
@@ -95,15 +96,15 @@ public class DoublyLinkedList implements List {
             return unlinkLast();
         }
 
+        //중간 노드 삭제
         int value = x.value;
         x.prev.next = x.next;
         x.next.prev = x.prev;
-        x.prev = null;
-        x.next = null;
         size--;
         return value;
     }
 
+    //succ 노드 앞에 노드 삽입
     private void linkBefore(int value, Node succ) {
         if(succ == head) {
             linkFirst(value);
@@ -141,15 +142,11 @@ public class DoublyLinkedList implements List {
 
     @Override
     public boolean remove(Integer value) {
-        Node cur = head;
-        for(int i=0; i<size; i++) {
-            if(cur.value == value) {
-                unlink(cur);
-                return true;
-            }
-            cur = cur.next;
-        }
-        return false;
+        int index = indexOf(value);
+        if(index == -1) return false;
+
+        unlink(node(index));
+        return true;
     }
 
     @Override
@@ -166,13 +163,7 @@ public class DoublyLinkedList implements List {
 
     @Override
     public boolean contains(int value) {
-        Node cur = head;
-        for(int i=0; i<size; i++) {
-            if(cur.value == value)
-                return true;
-            cur = cur.next;
-        }
-        return false;
+        return indexOf(value) != -1;
     }
 
     @Override
@@ -198,14 +189,8 @@ public class DoublyLinkedList implements List {
 
     @Override
     public void clear() {
-        for (Node x = head.next; x != tail; ) {
-            Node next = x.next;
-            x.next = null;
-            x.prev = null;
-            x = next;
-        }
-        head.next = tail;
-        tail.prev = head;
+        head = null;
+        tail = null;
         size = 0;
     }
 

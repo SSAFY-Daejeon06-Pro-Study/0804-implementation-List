@@ -1,7 +1,5 @@
 package List;
 
-import java.util.LinkedList;
-
 public class SinglyLinkedList implements List {
     static private class Node {
         int value;
@@ -17,7 +15,6 @@ public class SinglyLinkedList implements List {
     public SinglyLinkedList() {
         //더미노드 생성
         //head에서 x번 이동 = 인덱스 x-1번 노드
-        //head에서 size번 이동 = 인덱스 size-1번 노드
         head = new Node(0, null);
         size = 0;
     }
@@ -26,94 +23,76 @@ public class SinglyLinkedList implements List {
         if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
     }
 
+    //succ 노드 뒤에 새 노드 삽입
+    private void linkAfter(Node succ, int value) {
+        Node newNode = new Node(value, succ.next);
+        succ.next = newNode;
+        size++;
+    }
+
+    //succ 노드의 다음 노드 삭제
+    private int unlinkAfter(Node succ) {
+        int x = succ.next.value;
+        succ.next = succ.next.next;
+        size--;
+        return x;
+    }
+
+    //index 위치 노드 반환
+    private Node Node(int index) {
+        Node cur = head;
+        for(int i=0; i<index + 1; i++) cur = cur.next;
+        return cur;
+    }
+
     @Override
     public boolean add(int value) {
-        Node newNode = new Node(value, null);
-
-        Node tail = head;
-        for(int i=0; i<size; i++) tail = tail.next;
-
-        newNode.next = tail.next;
-        tail.next = newNode;
-        size++;
+        linkAfter(Node(size-1), value);
         return true;
     }
 
     @Override
     public void add(int index, int value) {
         if(index == size) {
-            add(value);
+            linkAfter(Node(size-1), value);
             return;
         }
 
         rangeCheck(index);
-        Node newNode = new Node(value, null);
-
-        Node pre = head;
-        for(int i=0; i<index; i++) pre = pre.next;
-
-        newNode.next = pre.next;
-        pre.next = newNode;
-        size++;
+        linkAfter(Node(index-1), value);
     }
 
     @Override
     public int remove(int index) {
         rangeCheck(index);
-
-        Node pre = head;
-        for(int i=0; i<index; i++) pre = pre.next;
-
-        Node delNode = pre.next;
-        int delValue = delNode.value;
-        pre.next = pre.next.next;
-        delNode.next = null;
-        size--;
-        return delValue;
+        return unlinkAfter(Node(index-1));
     }
 
     @Override
     public boolean remove(Integer value) {
-        Node pre = head;
-        for(int i=0; i<size-1; i++) {
-            if(pre.next.value == value) {
-                Node delNode = pre.next;
-                pre.next = pre.next.next;
-                delNode.next = null;
-                size--;
-                return true;
-            }
-            pre = pre.next;
-        }
-        return false;
+        int index = indexOf(value);
+        if(index == -1) return false;
+
+        unlinkAfter(Node(index-1));
+        return true;
     }
 
     @Override
     public int get(int index) {
         rangeCheck(index);
-
-        Node cur = head;
-        for(int i=0; i<index+1; i++) cur = cur.next;
-        return cur.value;
+        return Node(index).value;
     }
 
     @Override
     public void set(int index, int value) {
         rangeCheck(index);
-
-        Node cur = head;
-        for(int i=0; i<index+1; i++) cur = cur.next;
-        cur.value = value;
+        Node(index).value = value;
     }
 
     @Override
     public boolean contains(int value) {
-        Node cur = head;
-        for(int i=0; i<size; i++) {
-            cur = cur.next;
-            if(cur.value == value) return true;
-        }
-        return false;
+        if(indexOf(value) == -1) return false;
+        return true;
     }
 
     @Override
@@ -138,11 +117,7 @@ public class SinglyLinkedList implements List {
 
     @Override
     public void clear() {
-        for(Node x = head; x != null;) {
-            Node next = x.next;
-            x.next = null;
-            x = next;
-        }
+        head.next = null;
         size = 0;
     }
     public void print(){
